@@ -1,22 +1,58 @@
 {% assign current_variant = product.selected_or_first_available_variant %}
 
+{% assign card_accent = '#333' %}
+{% assign card_bg = 'radial-gradient(circle,#1a1a2a,#0e1117)' %}
+{% if product.title contains 'Red' or product.title contains 'Crimson' %}
+  {% assign card_accent = '#c41e3a' %}
+  {% assign card_bg = 'radial-gradient(circle,#2a0a15,#0e1117)' %}
+{% elsif product.title contains 'Navy' or product.title contains 'Blue' %}
+  {% assign card_accent = '#1a3a5c' %}
+  {% assign card_bg = 'radial-gradient(circle,#0a1530,#0e1117)' %}
+{% elsif product.title contains 'White' %}
+  {% assign card_accent = '#888' %}
+  {% assign card_bg = 'radial-gradient(circle,#1f2030,#0e1117)' %}
+{% endif %}
+
+{% assign color_name = product.title | remove: 'Tee Sleeves™ – ' | remove: 'Tee Sleeves - ' | remove: 'Tee Sleeves™ - ' | remove: 'Tee Sleeves ' %}
+
 <div class="product-page">
-  <div class="product-gallery reveal" style="background:radial-gradient(circle,#1a1a2a,#0e1117)">
-    <div id="product-image-wrapper">
-      {% if current_variant.image %}
-        <img id="product-main-image"
-             src="{{ current_variant.image | img_url: 'large' }}"
-             alt="{{ current_variant.image.alt | default: product.title | escape }}"
-             style="max-width:100%;height:auto;display:block">
-      {% elsif product.featured_image %}
-        <img id="product-main-image"
-             src="{{ product.featured_image | img_url: 'large' }}"
-             alt="{{ product.featured_image.alt | default: product.title | escape }}"
-             style="max-width:100%;height:auto;display:block">
-      {% endif %}
+
+  <!-- ══ BASEBALL CARD IMAGE PANEL ══ -->
+  <div class="product-gallery reveal" style="background:transparent;padding:40px 20px;">
+    <div class="bcard-inner" style="--card-accent:{{ card_accent }};max-width:380px;margin:0 auto;cursor:default;">
+      <div class="bcard-frame" style="background:{{ card_bg }};">
+        <div class="bcard-badge" style="background:#d4a853;color:#1a1a1a;">Tee Sleeves&trade;</div>
+        {% if product.featured_image %}
+          <img id="product-main-image"
+               src="{{ product.featured_image | img_url: 'large' }}"
+               alt="{{ product.featured_image.alt | default: product.title | escape }}"
+               style="width:100%;display:block;">
+        {% endif %}
+        <div class="bcard-banner">
+          <div class="bcard-team">Tee Sleeves&trade;</div>
+          <div class="bcard-name">{{ color_name }}</div>
+        </div>
+      </div>
+      <div class="bcard-info" style="padding:16px 20px 20px;">
+        <div class="bcard-stats">
+          <div class="bcard-stat"><div class="bcard-stat-val">&#9728;&#65039;</div><div class="bcard-stat-label">UV Block</div></div>
+          <div class="bcard-stat"><div class="bcard-stat-val">&#128167;</div><div class="bcard-stat-label">Rain Guard</div></div>
+          <div class="bcard-stat"><div class="bcard-stat-val">&#127482;&#127480;</div><div class="bcard-stat-label">USA Made</div></div>
+          <div class="bcard-stat"><div class="bcard-stat-val">&#128081;</div><div class="bcard-stat-label">Patent Pend.</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Color switcher links -->
+    <div style="display:flex;gap:12px;justify-content:center;margin-top:20px;">
+      <a href="/products/tee-sleeves%E2%84%A2-black"  title="Stealth Black"  style="width:28px;height:28px;border-radius:50%;background:#1a1a1a;border:2px solid {% if product.handle contains 'black' %}#d4a853{% else %}#444{% endif %};display:block;"></a>
+      <a href="/products/tee-sleeves%E2%84%A2-red"    title="Crimson Red"    style="width:28px;height:28px;border-radius:50%;background:#c41e3a;border:2px solid {% if product.handle contains 'red' %}#d4a853{% else %}#444{% endif %};display:block;"></a>
+      <a href="/products/tee-sleeve"                  title="Navy Blue"      style="width:28px;height:28px;border-radius:50%;background:#1a3a5c;border:2px solid {% if product.handle == 'tee-sleeve' %}#d4a853{% else %}#444{% endif %};display:block;"></a>
+      <a href="/products/tee-sleeves%E2%84%A2-white"  title="Clean White"    style="width:28px;height:28px;border-radius:50%;background:#e0e0e0;border:2px solid {% if product.handle contains 'white' %}#d4a853{% else %}#444{% endif %};display:block;"></a>
     </div>
   </div>
 
+  <!-- ══ PRODUCT DETAILS ══ -->
   <div class="product-details reveal">
     <div class="product-breadcrumb">
       <a href="/collections/all">Shop</a> &nbsp;/&nbsp; {{ product.title }}
@@ -25,96 +61,49 @@
     <h1 class="product-name">{{ product.title }}</h1>
 
     <div class="product-price-row">
-      <div class="product-price" id="product-price">
-        {{ current_variant.price | money }}
+      <div class="product-price">
+        <span style="font-size:0.55em;font-weight:400;opacity:0.7;display:block;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">Starting at</span>
+        $<span id="displayed-price">34.95</span>
       </div>
       <div class="product-shipping">&#10003; Free Shipping</div>
+    </div>
+
+    <!-- ── SIZE SELECTOR ── -->
+    <div class="product-option-label">Size</div>
+    <div class="size-options" id="size-options">
+      <div class="size-opt selected" data-size='2"' data-base="34.95" onclick="selectSize(this)">2"</div>
+      <div class="size-opt" data-size='3" + Baseball Hopper' data-base="49.95" onclick="selectSize(this)">3" + Baseball Hopper</div>
+      <div class="size-opt" data-size='4" + Softball Hopper' data-base="49.95" onclick="selectSize(this)">4" + Softball Hopper</div>
+    </div>
+    <div class="size-desc" id="sizeDesc">Universal pure slip cover. No ball retriever. Fits standard slim tee stems for baseball or softball.</div>
+
+    <!-- ── LOGO UPGRADE ── -->
+    <div class="product-option-label" style="margin-top:20px;">
+      Custom Logo Sticker
+      <span style="font-size:0.75em;color:var(--gold);font-weight:400;margin-left:8px;">+$9.95</span>
+    </div>
+    <div style="display:flex;gap:10px;margin-bottom:20px;">
+      <div class="size-opt selected" id="logo-no"  onclick="selectLogo(this,'no')"  style="flex:1;text-align:center;">No Logo</div>
+      <div class="size-opt"          id="logo-yes" onclick="selectLogo(this,'yes')" style="flex:1;text-align:center;">&#127912; Add Custom Logo +$9.95</div>
     </div>
 
     <p class="product-desc">{{ product.description }}</p>
 
     {% form 'product', product, id: 'product-form' %}
-      <input type="hidden" name="id" value="{{ current_variant.id }}" id="variant-id">
+      <input type="hidden" name="id"                       value="{{ current_variant.id }}">
+      <input type="hidden" name="properties[Size]"         id="prop-size"  value='2"'>
+      <input type="hidden" name="properties[Custom Logo]"  id="prop-logo"  value="No Logo">
 
-      {% for option in product.options_with_values %}
-
-        {%- assign option_name_down = option.name | downcase -%}
-
-        {% if option_name_down == 'size' %}
-          <div class="product-option-label">Size</div>
-          <div class="size-options">
-            {% for value in option.values %}
-              <div class="size-opt{% if option.selected_value == value %} selected{% endif %}"
-                   data-option-index="{{ option.position }}"
-                   data-option-value="{{ value | escape }}">
-                {{ value }}
-              </div>
-            {% endfor %}
-          </div>
-          <div class="size-desc" id="sizeDesc">
-            {%- if current_variant.title contains '2"' -%}
-              Universal pure slip cover. No ball retriever. Fits standard slim tee stems for baseball or softball.
-            {%- elsif current_variant.title contains '3"' -%}
-              Includes baseball hopper attachment. Picks up baseballs after each swing. Built for baseball tees.
-            {%- elsif current_variant.title contains '4"' -%}
-              Includes softball hopper attachment. Sized for softballs. Compatible with most softball tee bases.
-            {%- else -%}
-              Select a size to see details.
-            {%- endif -%}
-          </div>
-
-        {% elsif option_name_down == 'color' %}
-          <div class="product-option-label">Color</div>
-          <div class="color-options">
-            {% for value in option.values %}
-              {%- assign color_class = value | downcase | replace: ' ', '-' -%}
-              <label class="color-opt co-{{ color_class }}{% if option.selected_value == value %} selected{% endif %}"
-                     title="{{ value }}"
-                     data-option-index="{{ option.position }}"
-                     data-option-value="{{ value | escape }}">
-                <input type="radio"
-                       name="options[{{ option.name | escape }}]"
-                       value="{{ value | escape }}"
-                       {% if option.selected_value == value %}checked{% endif %}
-                       style="display:none">
-              </label>
-            {% endfor %}
-          </div>
-
-        {% elsif option_name_down == 'logo' %}
-          <div class="product-option-label">Custom Logo Sticker
-            <span style="font-size:0.8em;color:var(--gold);font-weight:400;margin-left:8px;">+$9.95 if added</span>
-          </div>
-          <div class="logo-options" style="display:flex;gap:12px;margin-bottom:16px;">
-            {% for value in option.values %}
-              <div class="size-opt logo-opt{% if option.selected_value == value %} selected{% endif %}"
-                   data-option-index="{{ option.position }}"
-                   data-option-value="{{ value | escape }}"
-                   style="flex:1;text-align:center;">
-                {{ value }}
-              </div>
-            {% endfor %}
-          </div>
-
-        {% endif %}
-      {% endfor %}
-
-      <button type="submit" name="add" class="add-to-cart" id="add-to-cart"
-              {% unless current_variant.available %}disabled{% endunless %}>
-        {% if current_variant.available %}
-          Add to Cart
-        {% else %}
-          Sold Out
-        {% endif %}
+      <button type="submit" name="add" class="add-to-cart" id="add-to-cart">
+        Add to Cart — $<span id="btn-price">34.95</span>
       </button>
-
     {% endform %}
 
     <a href="/pages/teams-and-clubs" class="btn-ghost" style="width:100%;justify-content:center;margin-top:12px;">
-      Ordering for a Team? Get 20% Off
+      Ordering for a Team? Get 20% Off &rarr;
     </a>
 
-    <div class="product-features">
+    <div class="product-features" style="margin-top:24px;">
       <div class="pf-item">&#9728;&#65039; UV Resistant</div>
       <div class="pf-item">&#128167; Weatherproof</div>
       <div class="pf-item">&#127482;&#127480; Made in USA</div>
@@ -124,75 +113,37 @@
 </div>
 
 <script>
-var productVariants = {{ product.variants | json }};
-
 var sizeDescriptions = {
   '2"':                      'Universal pure slip cover. No ball retriever. Fits standard slim tee stems for baseball or softball.',
-  '3" with Baseball Hopper': 'Includes baseball hopper attachment. Picks up baseballs after each swing. Built for baseball tees.',
-  '4" with Softball Hopper': 'Includes softball hopper attachment. Sized for softballs. Compatible with most softball tee bases.'
+  '3" + Baseball Hopper':    'Includes baseball hopper attachment. Picks up baseballs after each swing. Built for baseball tees.',
+  '4" + Softball Hopper':    'Includes softball hopper attachment. Sized for softballs. Compatible with most softball tee bases.'
 };
 
-// Click handler for size-opt and color-opt labels
-document.querySelectorAll('.size-opt, .color-opt, .logo-opt').forEach(function(el) {
-  el.addEventListener('click', function() {
-    // Deselect siblings in same option group
-    var idx = this.dataset.optionIndex;
-    document.querySelectorAll('[data-option-index="' + idx + '"]').forEach(function(s) {
-      s.classList.remove('selected');
-    });
-    this.classList.add('selected');
+var currentBase  = 34.95;
+var logoUpcharge = 0;
 
-    // Check any hidden radio inside (for color swatches)
-    var radio = this.querySelector('input[type="radio"]');
-    if (radio) radio.checked = true;
+function selectSize(el) {
+  document.querySelectorAll('#size-options .size-opt').forEach(function(s) { s.classList.remove('selected'); });
+  el.classList.add('selected');
+  currentBase = parseFloat(el.dataset.base);
+  document.getElementById('prop-size').value = el.dataset.size;
+  var desc = sizeDescriptions[el.dataset.size];
+  if (desc) document.getElementById('sizeDesc').textContent = desc;
+  updatePrice();
+}
 
-    updateVariant();
-  });
-});
+function selectLogo(el, choice) {
+  document.getElementById('logo-no').classList.remove('selected');
+  document.getElementById('logo-yes').classList.remove('selected');
+  el.classList.add('selected');
+  logoUpcharge = (choice === 'yes') ? 9.95 : 0;
+  document.getElementById('prop-logo').value = (choice === 'yes') ? 'Add Custom Logo (+$9.95)' : 'No Logo';
+  updatePrice();
+}
 
-function updateVariant() {
-  // Gather one selected value per option index
-  var selectedOptions = {};
-  document.querySelectorAll('[data-option-index].selected').forEach(function(el) {
-    selectedOptions[el.dataset.optionIndex] = el.dataset.optionValue;
-  });
-
-  var selectedArr = [];
-  Object.keys(selectedOptions).sort().forEach(function(k) {
-    selectedArr.push(selectedOptions[k]);
-  });
-
-  // Find matching variant
-  var match = productVariants.find(function(v) {
-    return v.options.every(function(o, i) {
-      return !selectedArr[i] || o === selectedArr[i];
-    });
-  });
-
-  if (match) {
-    document.getElementById('variant-id').value = match.id;
-
-    // Update price
-    var price = '$' + (match.price / 100).toFixed(2);
-    document.getElementById('product-price').textContent = price;
-
-    // Update button
-    var btn = document.getElementById('add-to-cart');
-    btn.textContent = match.available ? 'Add to Cart' : 'Sold Out';
-    btn.disabled = !match.available;
-
-    // Update size description
-    var sizeEl = document.getElementById('sizeDesc');
-    if (sizeEl && selectedOptions['1']) {
-      var desc = sizeDescriptions[selectedOptions['1']];
-      if (desc) sizeEl.textContent = desc;
-    }
-
-    // Update image if variant has one
-    var imgEl = document.getElementById('product-main-image');
-    if (imgEl && match.featured_image) {
-      imgEl.src = match.featured_image.src;
-    }
-  }
+function updatePrice() {
+  var total = (currentBase + logoUpcharge).toFixed(2);
+  document.getElementById('displayed-price').textContent = total;
+  document.getElementById('btn-price').textContent = total;
 }
 </script>
