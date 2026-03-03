@@ -1,0 +1,176 @@
+{% assign current_variant = product.selected_or_first_available_variant %}
+
+<div class="product-page">
+  <div class="product-gallery reveal" style="background:radial-gradient(circle,#1a1a2a,#0e1117)">
+    {% if product.variants.size > 1 %}
+      <div class="gallery-badge">Popular</div>
+    {% endif %}
+    <div id="product-image-wrapper">
+      {% if current_variant.image %}
+        <img id="product-main-image"
+             src="{{ current_variant.image | img_url: 'large' }}"
+             alt="{{ current_variant.image.alt | escape }}"
+             style="max-width:100%;height:auto;display:block">
+      {% elsif product.featured_image %}
+        <img id="product-main-image"
+             src="{{ product.featured_image | img_url: 'large' }}"
+             alt="{{ product.featured_image.alt | escape }}"
+             style="max-width:100%;height:auto;display:block">
+      {% endif %}
+    </div>
+  </div>
+
+  <div class="product-details reveal">
+    <div class="product-breadcrumb">
+      <a href="/collections/all">Shop</a> &nbsp;/&nbsp; {{ product.title }}
+    </div>
+
+    <h1 class="product-name">{{ product.title }}</h1>
+
+    <div class="product-price-row">
+      <div class="product-price" id="product-price">
+        {{ current_variant.price | money }}
+      </div>
+      <div class="product-shipping">&#10003; Free Shipping</div>
+    </div>
+
+    <p class="product-desc">{{ product.description }}</p>
+
+    {% form 'product', product, id: 'product-form', data-product-form: '' %}
+      <input type="hidden" name="id" value="{{ current_variant.id }}" id="variant-id">
+
+      <!-- Color Options -->
+      {% for option in product.options_with_values %}
+        {% if option.name == 'Color' %}
+          <div class="product-option-label">Color</div>
+          <div class="color-options">
+            {% for value in option.values %}
+              {% assign color_class = value | downcase | replace: ' ', '-' %}
+              <label class="color-opt co-{{ color_class }}{% if option.selected_value == value %} selected{% endif %}"
+                     title="{{ value }}"
+                     data-option-index="{{ option.position }}"
+                     data-option-value="{{ value }}">
+                <input type="radio"
+                       name="options[{{ option.name | escape }}]"
+                       value="{{ value | escape }}"
+                       {% if option.selected_value == value %}checked{% endif %}
+                       style="display:none">
+              </label>
+            {% endfor %}
+          </div>
+        {% endif %}
+
+        {% if option.name == 'Size' %}
+          <div class="product-option-label">Size</div>
+          <div class="size-options">
+            {% for value in option.values %}
+              <label class="size-opt{% if option.selected_value == value %} selected{% endif %}"
+                     data-option-index="{{ option.position }}"
+                     data-option-value="{{ value }}">
+                <input type="radio"
+                       name="options[{{ option.name | escape }}]"
+                       value="{{ value | escape }}"
+                       {% if option.selected_value == value %}checked{% endif %}
+                       style="display:none">
+                {{ value }}
+              </label>
+            {% endfor %}
+          </div>
+          <div class="size-desc" id="sizeDesc">
+            {% if current_variant.title contains '2"' %}
+              Universal pure slip cover. No ball retriever. Fits standard slim tee stems for baseball or softball.
+            {% elsif current_variant.title contains '3"' %}
+              Baseball size with built-in ball retriever compatibility. Picks up baseballs after each swing.
+            {% elsif current_variant.title contains '4"' %}
+              Softball size with extended coverage. Compatible with most softball tee bases.
+            {% else %}
+              Select a size to see details.
+            {% endif %}
+          </div>
+        {% endif %}
+      {% endfor %}
+
+      <button type="submit" name="add" class="add-to-cart" id="add-to-cart">
+        {% if current_variant.available %}
+          Add to Cart
+        {% else %}
+          Sold Out
+        {% endif %}
+      </button>
+    {% endform %}
+
+    <a href="/pages/teams" class="btn-ghost" style="width:100%;justify-content:center">
+      Ordering for a Team? Get 20% Off
+    </a>
+
+    <div class="product-features">
+      <div class="pf-item">&#9728;&#65039; UV Resistant</div>
+      <div class="pf-item">&#128167; Weatherproof</div>
+      <div class="pf-item">&#127482;&#127480; Made in USA</div>
+      <div class="pf-item">&#127912; Custom Branding</div>
+    </div>
+  </div>
+</div>
+
+<!-- Variant data for JS -->
+<script>
+var productVariants = {{ product.variants | json }};
+var productImages = {{ product.images | json }};
+
+// Option label clicks
+document.querySelectorAll('.color-opt, .size-opt').forEach(function(label) {
+  label.addEventListener('click', function() {
+    var idx = this.dataset.optionIndex;
+    // Remove selected from siblings
+    this.parentNode.querySelectorAll('label').forEach(function(l) {
+      l.classList.remove('selected');
+    });
+    this.classList.add('selected');
+    updateVariant();
+  });
+});
+
+function updateVariant() {
+  // Gather selected options
+  var selected = [];
+  document.querySelectorAll('.product-details .selected[data-option-value]').forEach(function(el) {
+    selected.push(el.dataset.optionValue);
+  });
+
+  // Find matching variant
+  var match = productVariants.find(function(v) {
+    return v.options.every(function(o, i) {
+      return selected[i] === undefined || o === selected[i];
+    });
+  });
+
+  if (match) {
+    document.getElementById('variant-id').value = match.id;
+    document.getElementById('product-price').textContent = formatMoney(match.price);
+    var addBtn = document.getElementById('add-to-cart');
+    addBtn.textContent = match.available ? 'Add to Cart' : 'Sold Out';
+    addBtn.disabled = !match.available;
+
+    // Update size description
+    var sizeDesc = document.getElementById('sizeDesc');
+    if (sizeDesc) {
+      var sizeMap = {
+        '2"': 'Universal pure slip cover. No ball retriever. Fits standard slim tee stems for baseball or softball.',
+        '3"': 'Baseball size with built-in ball retriever compatibility. Picks up baseballs after each swing.',
+        '4"': 'Softball size with extended coverage. Compatible with most softball tee bases.'
+      };
+      var sizePart = selected.find(function(s) { return sizeMap[s]; });
+      if (sizePart) sizeDesc.textContent = sizeMap[sizePart];
+    }
+
+    // Update image if variant has one
+    if (match.featured_image) {
+      document.getElementById('product-main-image').src = match.featured_image.src;
+    }
+  }
+}
+
+function formatMoney(cents) {
+  return '$' + (cents / 100).toFixed(2);
+}
+</script>

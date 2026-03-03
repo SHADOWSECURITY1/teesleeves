@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="{{ request.locale.iso_code }}">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>{{ page_title }}{% if page_title != shop.name %} | {{ shop.name }}{% endif %}</title>
+  <link href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600;700&family=Barlow+Condensed:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=Barlow:ital,wght@0,300;0,400;0,500;0,600;1,300;1,400&display=swap" rel="stylesheet">
+  {{ 'theme.css' | asset_url | stylesheet_tag }}
+  {{ content_for_header }}
+</head>
+<body>
+
+  <!-- ANNOUNCE BAR -->
+  <div class="announce-bar">&#9918; Veteran &amp; First Responder Owned &middot; 10% Off + Free Shipping &#9918;</div>
+
+  <!-- NAV -->
+  <nav>
+    <a href="{{ routes.root_url }}" class="nav-logo">
+      <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" style="height:48px;display:block">
+    </a>
+    <div class="nav-links">
+      <a href="/collections/all"{% if request.path contains '/collections' %} class="active"{% endif %}>Shop</a>
+      <a href="/pages/teams"{% if request.path contains '/pages/teams' %} class="active"{% endif %}>Teams</a>
+      <a href="/pages/about"{% if request.path contains '/pages/about' %} class="active"{% endif %}>About</a>
+      <a href="/pages/contact"{% if request.path contains '/pages/contact' %} class="active"{% endif %}>Contact</a>
+      <a href="/collections/all" class="nav-cta">Shop Now</a>
+    </div>
+  </nav>
+
+  <main role="main" id="MainContent">
+    {{ content_for_layout }}
+  </main>
+
+  <footer>
+    <div class="footer-inner">
+      <div class="footer-brand">
+        <a href="{{ routes.root_url }}">
+          <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" style="height:40px;display:block">
+        </a>
+      </div>
+      <div class="footer-links">
+        <a href="/collections/all">Shop</a>
+        <a href="/pages/teams">Teams</a>
+        <a href="/pages/about">About</a>
+        <a href="/pages/contact">Contact</a>
+      </div>
+    </div>
+    <div class="footer-copy">&copy; {{ 'now' | date: "%Y" }} Tee Sleeves&trade; &middot; Protect Your Tee. Elevate Your Game. &middot; Made with &#10084; in the USA</div>
+  </footer>
+
+  <script>
+  const observer = new IntersectionObserver(e => {
+    e.forEach((entry, i) => {
+      if (entry.isIntersecting) {
+        setTimeout(() => entry.target.classList.add('visible'), i * 100);
+        observer.unobserve(entry.target);
+      }
+    });
+  }, { threshold: 0.1 });
+  document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+  </script>
+
+</body>
+</html>

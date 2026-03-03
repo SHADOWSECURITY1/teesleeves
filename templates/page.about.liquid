@@ -1,0 +1,107 @@
+<!-- HERO -->
+<section class="about-hero">
+  <div class="section-tag reveal">Our Story</div>
+  <h1 class="section-title reveal">Built by a Baseball Family.<br><span class="gold">For Every Baseball Family.</span></h1>
+  <p class="about-hero-sub reveal">Veteran and first responder owned. Born from a backyard batting tee, a kid who loves the game, and a simple question: why doesn't this exist yet?</p>
+</section>
+
+<!-- ORIGIN STORY -->
+<section class="origin-section" id="why">
+  <div class="origin-grid">
+    <div class="origin-visual reveal">
+      <div class="origin-scene">
+        <div class="yard-tee">
+          <div class="yt-top"></div>
+          <div class="yt-stem"></div>
+          <div class="yt-base"></div>
+        </div>
+        <div class="yt-sleeve"></div>
+        <div class="yard-ground"></div>
+      </div>
+    </div>
+    <div class="origin-text">
+      <div class="section-tag reveal">The Origin</div>
+      <h2 class="section-title reveal">It Started in the <span class="gold">Backyard</span></h2>
+      <p class="origin-italic reveal">Every baseball parent knows the drill.</p>
+      <p class="reveal">You buy a quality batting tee so your kid can get extra swings. It lives in the backyard because that's where the reps happen &mdash; before school, after dinner, weekends. Then one day you look at it and the rubber is cracked, the color is faded, and the whole thing looks like it aged ten years in one summer.</p>
+      <p class="reveal">So you replace it. Eighty, ninety, a hundred dollars later, and the cycle starts all over again. We looked at that problem and thought: the tee doesn't need to be tougher. It needs a cover.</p>
+      <p class="reveal">That's how Tee Sleeves was born. A simple, premium PVC slip-on cover that shields your batting tee from sun, rain, dirt, and everything else the outdoors throws at it. Two seconds to put on. Two seconds to take off. Your tee stays protected between every session.</p>
+    </div>
+  </div>
+</section>
+
+<!-- QUOTE -->
+<div class="quote-section reveal">
+  <div class="quote-mark">&ldquo;</div>
+  <div class="quote-text">You don't just buy a batting tee. You invest in every swing your kid will ever take in the backyard.</div>
+  <div class="quote-attr">The Tee Sleeves Philosophy</div>
+</div>
+
+<!-- WHY TEE SLEEVES -->
+<section class="why-section">
+  <div class="section-tag reveal">Why Tee Sleeves</div>
+  <h2 class="section-title reveal">Simple Problem. <span class="gold">Simple Fix.</span></h2>
+  <div class="why-grid">
+    <div class="why-card reveal">
+      <span class="why-icon">&#9728;&#65039;</span>
+      <h3>UV Protection</h3>
+      <p>Industrial PVC blocks the UV rays that crack and age rubber tee tops left in direct sunlight. One cover, years of protection.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">&#128167;</span>
+      <h3>Weather Shield</h3>
+      <p>Rain, morning dew, humidity &mdash; moisture is the silent killer of batting tees. Tee Sleeves keep it all out.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">&#128176;</span>
+      <h3>Save Money</h3>
+      <p>A $30 sleeve can save you from replacing a $100 tee every season. The math is simple.</p>
+    </div>
+    <div class="why-card reveal">
+      <span class="why-icon">&#128588;</span>
+      <h3>Dead Simple</h3>
+      <p>No tools. No assembly. Slip it on when you're done hitting. Take it off when it's time to swing. That's it.</p>
+    </div>
+  </div>
+</section>
+
+<!-- VALUES -->
+<section class="values-section">
+  <div class="section-tag reveal">Our Values</div>
+  <h2 class="section-title reveal">What We <span class="gold">Stand For</span></h2>
+  <div class="values-grid">
+    <div class="value-item reveal">
+      <span class="value-icon">&#127482;&#127480;</span>
+      <h3>Made in America</h3>
+      <p>Every Tee Sleeve is manufactured, assembled, and shipped from the USA. American materials, American craftsmanship, American jobs.</p>
+    </div>
+    <div class="value-item reveal">
+      <span class="value-icon">&#11088;</span>
+      <h3>Veteran &amp; First Responder Owned</h3>
+      <p>We served our communities before we started this business. That same sense of duty drives how we build products and treat customers.</p>
+    </div>
+    <div class="value-item reveal">
+      <span class="value-icon">&#9918;</span>
+      <h3>Love of the Game</h3>
+      <p>This business exists because we're baseball families. The backyard tee is where the love of the game starts, and we want to keep it going.</p>
+    </div>
+  </div>
+</section>
+
+<!-- FINAL CTA -->
+<section class="final-cta">
+  <div class="reveal">
+    <h2 class="section-title">Cover It. Forget It.<br><span class="gold">It's Protected.</span></h2>
+    <p class="final-cta-sub">The tee that builds the swing deserves to last. We've got it covered.</p>
+    <a href="/collections/all" class="btn-primary">Shop Tee Sleeves &rarr;</a>
+  </div>
+</section>
+
+<script>
+const observer = new IntersectionObserver(e => {
+  e.forEach((e, i) => {
+    e.isIntersecting && (setTimeout(() => e.target.classList.add('visible'), i * 100), observer.unobserve(e.target));
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>

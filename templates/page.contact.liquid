@@ -1,0 +1,120 @@
+<!-- HERO -->
+<section class="contact-hero">
+  <div class="contact-hero-glow"></div>
+  <div class="section-tag">Get In Touch</div>
+  <h1 class="section-title">We're Here to <span class="gold">Help</span></h1>
+  <p class="contact-hero-sub">Questions about sizing, team orders, custom branding, or anything else? We respond within 24 hours.</p>
+</section>
+
+<!-- CONTACT GRID -->
+<section class="contact-section">
+  <div class="contact-grid">
+    <div class="contact-info">
+      <div class="info-card reveal">
+        <span class="info-card-icon">&#128231;</span>
+        <h3>Email Us</h3>
+        <p>For general questions, order support, or just to say hey.</p>
+        <p style="margin-top:8px"><a href="mailto:info@teesleeves.com">info@teesleeves.com</a></p>
+        <span class="response-time">&#10003; Responds within 24 hours</span>
+      </div>
+      <div class="info-card reveal">
+        <span class="info-card-icon">&#127942;</span>
+        <h3>Team Orders</h3>
+        <p>Bulk pricing, custom branding, and program orders. We'll get you a quote fast.</p>
+        <p style="margin-top:8px"><a href="/pages/teams">Visit Team Pricing &rarr;</a></p>
+      </div>
+      <div class="info-card reveal">
+        <span class="info-card-icon">&#127482;&#127480;</span>
+        <h3>About Us</h3>
+        <p>Veteran and first responder owned. Made in the USA. Learn our story.</p>
+        <p style="margin-top:8px"><a href="/pages/about">Read Our Story &rarr;</a></p>
+      </div>
+    </div>
+
+    <div class="contact-form-wrap reveal">
+      <h2 class="form-title">Send a Message</h2>
+      <p class="form-sub">Fill out the form below and we'll get back to you within 24 hours. For team orders, use our <a href="/pages/teams" style="color:var(--gold-warm)">team inquiry form</a>.</p>
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Name</label>
+          <input type="text" class="form-input" placeholder="Your name">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input type="email" class="form-input" placeholder="you@email.com">
+        </div>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Subject</label>
+        <select class="form-select">
+          <option value="">What's this about?</option>
+          <option>Order Question</option>
+          <option>Sizing Help</option>
+          <option>Custom Branding</option>
+          <option>Wholesale / Retail</option>
+          <option>Returns &amp; Exchanges</option>
+          <option>Other</option>
+        </select>
+      </div>
+      <div class="form-group">
+        <label class="form-label">Message</label>
+        <textarea class="form-textarea" placeholder="Tell us what's on your mind..."></textarea>
+      </div>
+      <button class="form-submit">Send Message &rarr;</button>
+    </div>
+  </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+  <div class="section-tag reveal">FAQ</div>
+  <h2 class="section-title reveal">Common <span class="gold">Questions</span></h2>
+  <div class="faq-list">
+    <div class="faq-item reveal">
+      <button class="faq-question">What size Tee Sleeve do I need? <span class="faq-toggle">+</span></button>
+      <div class="faq-answer"><p>We offer three sizes: 2" fits standard slim tee stems (baseball &amp; softball), 3" fits baseball tees with a built-in ball retriever, and 4" fits softball tees with a ball hopper attachment. Check our size guide on the shop page if you're unsure.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question">What tees do Tee Sleeves fit? <span class="faq-toggle">+</span></button>
+      <div class="faq-answer"><p>Tee Sleeves are designed to fit all major batting tee brands including Tanner, JUGS, G Tee, and more. The slip-on design accommodates variations in stem height and diameter across the three size options.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question">Do you offer custom team colors? <span class="faq-toggle">+</span></button>
+      <div class="faq-answer"><p>Yes! For team orders of 10+, we can match any color. Send us a Pantone code, hex value, or even a photo of your team jersey and we'll match it. Visit our teams page to get started.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question">How long does shipping take? <span class="faq-toggle">+</span></button>
+      <div class="faq-answer"><p>Standard orders ship within 1-2 business days and typically arrive in 3-5 business days. All orders ship free within the continental US. Custom team orders may take 1-2 additional weeks for production.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question">What is your return policy? <span class="faq-toggle">+</span></button>
+      <div class="faq-answer"><p>We stand behind our product. If you're not completely satisfied, contact us within 30 days for a full refund or exchange. We want you to be happy with your Tee Sleeve.</p></div>
+    </div>
+    <div class="faq-item reveal">
+      <button class="faq-question">Can I use Tee Sleeves as a team fundraiser? <span class="faq-toggle">+</span></button>
+      <div class="faq-answer"><p>Absolutely! Many teams sell custom-branded Tee Sleeves as a fundraiser. Low cost, high margin, and parents actually want them. Contact us for fundraiser pricing and we'll help you set it up.</p></div>
+    </div>
+  </div>
+</section>
+
+<script>
+// FAQ accordion
+document.querySelectorAll('.faq-question').forEach(btn => {
+  btn.addEventListener('click', () => {
+    const item = btn.parentElement;
+    const wasOpen = item.classList.contains('open');
+    // Close all
+    document.querySelectorAll('.faq-item').forEach(i => i.classList.remove('open'));
+    // Toggle clicked
+    if (!wasOpen) item.classList.add('open');
+  });
+});
+
+// Scroll reveal
+const observer = new IntersectionObserver(e => {
+  e.forEach((e, i) => {
+    e.isIntersecting && (setTimeout(() => e.target.classList.add('visible'), i * 100), observer.unobserve(e.target));
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+</script>
