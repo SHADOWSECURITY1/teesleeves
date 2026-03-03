@@ -15,8 +15,9 @@
 
   <!-- NAV -->
   <nav>
-    <a href="{{ routes.root_url }}" class="nav-logo">
+    <a href="{{ routes.root_url }}" class="nav-logo" style="display:flex;align-items:center;gap:12px;text-decoration:none;">
       <img src="{{ 'logo.png' | asset_url }}" alt="{{ shop.name }}" style="height:48px;display:block">
+      <span style="font-family:'Oswald',sans-serif;font-size:1.35rem;font-weight:700;letter-spacing:3px;text-transform:uppercase;color:#f5f5f5;line-height:1;">TEE SLEEVES</span>
     </a>
     <div class="nav-links">
       <a href="/collections/all"{% if request.path contains '/collections' %} class="active"{% endif %}>Shop</a>
