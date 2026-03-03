@@ -87,16 +87,42 @@
 <!-- CUSTOM BRANDING -->
 <section class="branding-section">
   <div class="branding-grid">
-    <div class="branding-visual reveal">
-      <div class="branding-mockup">
-        <div class="mock-label">Your Colors</div>
-        <div class="mock-tubes">
-          <div class="mock-tube mock-tube-1"></div>
-          <div class="mock-tube mock-tube-2"></div>
-          <div class="mock-tube mock-tube-3"></div>
+    <div class="branding-visual reveal" style="display:flex;gap:20px;justify-content:center;align-items:flex-start;flex-wrap:wrap;">
+
+      <!-- Highland Hawks Card -->
+      <div class="bcard-inner" style="--card-accent:#1a3a5c;max-width:220px;flex:1;min-width:180px;">
+        <div class="bcard-frame" style="background:radial-gradient(circle,#0a1530,#0e1117);">
+          <div class="bcard-badge" style="background:#d4a853;color:#1a1a1a;">Team Order</div>
+          <img src="{{ 'teams-highland-hawks.jpg' | asset_url }}"
+               alt="Highland Hawks custom Tee Sleeve"
+               style="width:100%;display:block;">
+          <div class="bcard-banner">
+            <div class="bcard-team">Highland Hawks</div>
+            <div class="bcard-name">Navy Blue</div>
+          </div>
         </div>
-        <div class="mock-logo-area">Your Logo</div>
+        <div class="bcard-info" style="padding:12px 16px;">
+          <div class="bcard-tagline">Custom team colors with logo application. Game-ready and field-tough.</div>
+        </div>
       </div>
+
+      <!-- Richmond Braves Card -->
+      <div class="bcard-inner" style="--card-accent:#c41e3a;max-width:220px;flex:1;min-width:180px;">
+        <div class="bcard-frame" style="background:radial-gradient(circle,#2a0a15,#0e1117);">
+          <div class="bcard-badge">&#127942; Fan Fave</div>
+          <img src="{{ 'teams-richmond-braves.png' | asset_url }}"
+               alt="Richmond Braves custom Tee Sleeve"
+               style="width:100%;display:block;">
+          <div class="bcard-banner">
+            <div class="bcard-team">Richmond Braves</div>
+            <div class="bcard-name">Crimson Red</div>
+          </div>
+        </div>
+        <div class="bcard-info" style="padding:12px 16px;">
+          <div class="bcard-tagline">Bold team presence. Stands out at practice and protects all season.</div>
+        </div>
+      </div>
+
     </div>
     <div class="branding-text">
       <div class="section-tag reveal">Custom Branding</div>
