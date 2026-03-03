@@ -1,82 +1,149 @@
-<div class="page-hero">
-  <div class="page-hero-glow"></div>
-  <div class="section-tag">The Arsenal</div>
-  <h1 class="section-title">Shop <span class="gold">{{ collection.title }}</span></h1>
-  <p class="section-subtitle">Premium PVC slip-on covers that shield your batting tee from sun, rain, dirt, and the elements. Available in four colors and three sizes.</p>
-</div>
+{% if collection.handle == 'all' %}
 
-<div class="shop-grid">
-  {% for product in collection.products %}
-    {% assign bg_color = '#1f1f2a' %}
-    {% if product.title contains 'Red' or product.title contains 'Crimson' %}
-      {% assign bg_color = '#2a0a15' %}
-    {% elsif product.title contains 'Navy' or product.title contains 'Blue' %}
-      {% assign bg_color = '#0a1530' %}
-    {% elsif product.title contains 'White' %}
-      {% assign bg_color = '#1f2030' %}
-    {% endif %}
-
-    <a href="{{ product.url }}" class="shop-card reveal">
-      <div class="shop-swatch" style="background:radial-gradient(circle,{{ bg_color }},#0e1117);">
-        {% if product.available == false %}
-          <div class="shop-tag">Sold Out</div>
-        {% elsif forloop.first %}
-          <div class="shop-tag">Popular</div>
-        {% endif %}
-        {% if product.featured_image %}
-          <img src="{{ product.featured_image | img_url: 'large' }}"
-               alt="{{ product.featured_image.alt | default: product.title | escape }}"
-               class="product-photo">
-        {% endif %}
+  <!-- ══════════ TEE SLEEVES SECTION ══════════ -->
+  <section style="padding:60px 20px 40px;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="section-tag">The Product</div>
+      <h2 class="section-title reveal">Tee <span class="gold">Sleeves&trade;</span></h2>
+      <p class="section-subtitle reveal">Premium PVC slip-on covers that shield your batting tee from sun, rain, dirt, and the elements. Four colors. Three sizes.</p>
+      <div class="lineup-grid">
+        {% assign ts_col = collections['tee-sleeves'] %}
+        {% for product in ts_col.products %}
+          {% assign accent = '#333' %}
+          {% if product.title contains 'Red' or product.title contains 'Crimson' %}{% assign accent = '#c41e3a' %}
+          {% elsif product.title contains 'Navy' or product.title contains 'Blue' %}{% assign accent = '#1a3a5c' %}
+          {% elsif product.title contains 'White' %}{% assign accent = '#888' %}
+          {% endif %}
+          <a href="{{ product.url }}" class="bcard reveal">
+            <div class="bcard-inner" style="--card-accent: {{ accent }};">
+              <div class="bcard-frame">
+                {% if forloop.first %}<div class="bcard-badge" style="background:#d4a853;color:#1a1a1a;">Popular</div>{% endif %}
+                {% if product.featured_image %}
+                  <img src="{{ product.featured_image | img_url: 'large' }}"
+                       alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                       loading="lazy">
+                {% endif %}
+                <div class="bcard-banner">
+                  <div class="bcard-team">Tee Sleeves&trade;</div>
+                  <div class="bcard-name">{{ product.title | remove: 'Tee Sleeves™ – ' | remove: 'Tee Sleeves - ' | remove: 'Tee Sleeves™ - ' | remove: 'Tee Sleeves ' }}</div>
+                </div>
+              </div>
+              <div class="bcard-info">
+                <div class="bcard-tagline">{{ product.description | strip_html | truncate: 85 }}</div>
+                <div class="bcard-stats">
+                  <div class="bcard-stat"><div class="bcard-stat-val">&#9728;&#65039;</div><div class="bcard-stat-label">UV Block</div></div>
+                  <div class="bcard-stat"><div class="bcard-stat-val">&#128167;</div><div class="bcard-stat-label">Rain Guard</div></div>
+                  <div class="bcard-stat"><div class="bcard-stat-val">&#127482;&#127480;</div><div class="bcard-stat-label">USA Made</div></div>
+                </div>
+                <div class="bcard-bottom">
+                  <div class="bcard-price">
+                    <span style="font-size:0.65em;font-weight:400;opacity:0.75;display:block;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">Starting at</span>
+                    {{ product.price | money }}
+                  </div>
+                  <div class="bcard-cta" style="background:{{ accent }};">Shop &rarr;</div>
+                </div>
+              </div>
+            </div>
+          </a>
+        {% else %}
+          <p style="color:var(--smoke);padding:20px;">No products found.</p>
+        {% endfor %}
       </div>
-      <div class="shop-info">
-        <div class="shop-name">{{ product.title }}</div>
-        <div class="shop-desc">{{ product.description | strip_html | truncate: 80 }}</div>
-        <div class="shop-bottom">
-          <div class="shop-price">
-            {% if product.compare_at_price > product.price %}
-              <span style="text-decoration:line-through;opacity:0.5;margin-right:6px;">{{ product.compare_at_price | money }}</span>
-            {% endif %}
-            {{ product.price | money }}
-          </div>
-          <div class="shop-btn">View Details &rarr;</div>
-        </div>
-      </div>
-    </a>
-  {% else %}
-    <p style="color:var(--mist);padding:40px;">No products found in this collection.</p>
-  {% endfor %}
-</div>
+    </div>
+  </section>
 
-<div class="size-guide reveal">
-  <div class="section-tag">Size Guide</div>
-  <h2 class="section-title" style="font-size:clamp(28px,3vw,40px)">Find Your <span class="gold">Fit</span></h2>
-  <table class="size-table">
-    <thead>
-      <tr><th>Diameter</th><th>Sport</th><th>Type</th><th>Description</th></tr>
-    </thead>
-    <tbody>
-      <tr>
-        <td><strong style="color:var(--gold-warm)">2"</strong></td>
-        <td>Baseball &amp; Softball</td>
-        <td>Universal Slip Cover</td>
-        <td>Pure protection sleeve. No ball retriever. Fits standard slim tee stems.</td>
-      </tr>
-      <tr>
-        <td><strong style="color:var(--gold-warm)">3"</strong></td>
-        <td>Baseball</td>
-        <td>Ball Retriever Compatible</td>
-        <td>Designed for baseball tees with built-in ball retriever. Picks up baseballs.</td>
-      </tr>
-      <tr>
-        <td><strong style="color:var(--gold-warm)">4"</strong></td>
-        <td>Softball</td>
-        <td>Ball Hopper Compatible</td>
-        <td>Built for softball tees with ball hopper attachment. Sized for softballs.</td>
-      </tr>
-    </tbody>
-  </table>
-</div>
+  <!-- ══════════ APPAREL SECTION ══════════ -->
+  <section style="padding:40px 20px 80px;border-top:1px solid rgba(255,255,255,0.07);">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="section-tag">Gear Up</div>
+      <h2 class="section-title reveal">Tee Sleeves <span class="gold">Apparel</span></h2>
+      <p class="section-subtitle reveal">Rep the brand on and off the field.</p>
+      <div class="lineup-grid">
+        {% assign apparel_col = collections['apparel'] %}
+        {% for product in apparel_col.products %}
+          <a href="{{ product.url }}" class="bcard reveal">
+            <div class="bcard-inner" style="--card-accent: #d4a853;">
+              <div class="bcard-frame">
+                {% if product.featured_image %}
+                  <img src="{{ product.featured_image | img_url: 'large' }}"
+                       alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                       loading="lazy">
+                {% endif %}
+                <div class="bcard-banner">
+                  <div class="bcard-team">Tee Sleeves&trade;</div>
+                  <div class="bcard-name">{{ product.title }}</div>
+                </div>
+              </div>
+              <div class="bcard-info">
+                <div class="bcard-tagline">{{ product.description | strip_html | truncate: 85 }}</div>
+                <div class="bcard-bottom">
+                  <div class="bcard-price">{{ product.price | money }}</div>
+                  <div class="bcard-cta">Shop &rarr;</div>
+                </div>
+              </div>
+            </div>
+          </a>
+        {% else %}
+          <p style="color:var(--smoke);padding:20px;">No apparel products found.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+{% else %}
+
+  <!-- ══════════ SINGLE COLLECTION VIEW ══════════ -->
+  <section style="padding:60px 20px 80px;">
+    <div style="max-width:1200px;margin:0 auto;">
+      <div class="section-tag">Shop</div>
+      <h2 class="section-title reveal">{{ collection.title }}</h2>
+      {% if collection.description != blank %}
+        <p class="section-subtitle reveal">{{ collection.description }}</p>
+      {% endif %}
+      <div class="lineup-grid">
+        {% for product in collection.products %}
+          {% assign accent = '#d4a853' %}
+          {% if product.title contains 'Red' or product.title contains 'Crimson' %}{% assign accent = '#c41e3a' %}
+          {% elsif product.title contains 'Navy' or product.title contains 'Blue' %}{% assign accent = '#1a3a5c' %}
+          {% elsif product.title contains 'Black' %}{% assign accent = '#333' %}
+          {% elsif product.title contains 'White' %}{% assign accent = '#888' %}
+          {% endif %}
+          <a href="{{ product.url }}" class="bcard reveal">
+            <div class="bcard-inner" style="--card-accent: {{ accent }};">
+              <div class="bcard-frame">
+                {% unless product.available %}<div class="bcard-badge" style="background:#555;">Sold Out</div>{% endunless %}
+                {% if product.featured_image %}
+                  <img src="{{ product.featured_image | img_url: 'large' }}"
+                       alt="{{ product.featured_image.alt | default: product.title | escape }}"
+                       loading="lazy">
+                {% endif %}
+                <div class="bcard-banner">
+                  <div class="bcard-team">Tee Sleeves&trade;</div>
+                  <div class="bcard-name">{{ product.title }}</div>
+                </div>
+              </div>
+              <div class="bcard-info">
+                <div class="bcard-tagline">{{ product.description | strip_html | truncate: 85 }}</div>
+                <div class="bcard-bottom">
+                  <div class="bcard-price">
+                    {% if product.price_varies %}
+                      <span style="font-size:0.65em;font-weight:400;opacity:0.75;display:block;letter-spacing:1px;text-transform:uppercase;margin-bottom:2px;">Starting at</span>
+                    {% endif %}
+                    {{ product.price | money }}
+                  </div>
+                  <div class="bcard-cta" style="background:{{ accent }};">Shop &rarr;</div>
+                </div>
+              </div>
+            </div>
+          </a>
+        {% else %}
+          <p style="color:var(--smoke);padding:20px;">No products in this collection yet.</p>
+        {% endfor %}
+      </div>
+    </div>
+  </section>
+
+{% endif %}
 
 <script>
 const observer = new IntersectionObserver(e => {
