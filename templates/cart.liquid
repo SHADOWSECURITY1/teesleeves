@@ -1,0 +1,109 @@
+<div style="max-width:860px;margin:60px auto;padding:0 24px;">
+
+  <div class="section-tag">Your Order</div>
+  <h1 class="section-title" style="margin-bottom:40px;">Your <span class="gold">Cart</span></h1>
+
+  {% if cart.item_count == 0 %}
+    <div style="text-align:center;padding:80px 20px;">
+      <p style="font-family:'Barlow',sans-serif;font-size:1.2rem;color:var(--smoke);margin-bottom:32px;">Your cart is empty.</p>
+      <a href="/collections/all" class="add-to-cart" style="display:inline-block;text-decoration:none;padding:16px 40px;">Shop Now &rarr;</a>
+    </div>
+
+  {% else %}
+    <form action="/cart" method="post">
+
+      <!-- Cart Items -->
+      <div style="border-top:1px solid rgba(255,255,255,0.08);margin-bottom:32px;">
+        {% for item in cart.items %}
+          <div style="display:flex;gap:20px;align-items:flex-start;padding:24px 0;border-bottom:1px solid rgba(255,255,255,0.08);">
+
+            <!-- Product Image -->
+            <a href="{{ item.url }}">
+              {% if item.image %}
+                <img src="{{ item.image | img_url: '120x120', crop: 'center' }}"
+                     alt="{{ item.title | escape }}"
+                     style="width:100px;height:100px;object-fit:cover;border-radius:8px;border:1px solid rgba(255,255,255,0.1);display:block;">
+              {% endif %}
+            </a>
+
+            <!-- Item Details -->
+            <div style="flex:1;min-width:0;">
+              <a href="{{ item.url }}" style="font-family:'Oswald',sans-serif;font-size:1.1rem;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--white);text-decoration:none;">
+                {{ item.product.title }}
+              </a>
+
+              {% unless item.variant.title == 'Default Title' %}
+                <div style="font-size:0.85rem;color:var(--smoke);margin-top:4px;">{{ item.variant.title }}</div>
+              {% endunless %}
+
+              <!-- Line Item Properties (Size, Logo) -->
+              {% for property in item.properties %}
+                {% unless property.last == blank %}
+                  <div style="font-size:0.82rem;color:var(--gold);margin-top:3px;">
+                    {{ property.first }}: {{ property.last }}
+                  </div>
+                {% endunless %}
+              {% endfor %}
+
+              <!-- Quantity + Remove -->
+              <div style="display:flex;align-items:center;gap:16px;margin-top:14px;">
+                <div style="display:flex;align-items:center;border:1px solid rgba(255,255,255,0.15);border-radius:6px;overflow:hidden;">
+                  <button type="button" onclick="updateQty({{ forloop.index0 }}, -1)"
+                          style="width:36px;height:36px;background:rgba(255,255,255,0.05);border:none;color:var(--white);font-size:1.1rem;cursor:pointer;">−</button>
+                  <input type="number" name="updates[]"
+                         value="{{ item.quantity }}" min="0"
+                         id="qty-{{ forloop.index0 }}"
+                         style="width:44px;height:36px;background:transparent;border:none;color:var(--white);text-align:center;font-family:'Barlow',sans-serif;font-size:0.95rem;">
+                  <button type="button" onclick="updateQty({{ forloop.index0 }}, 1)"
+                          style="width:36px;height:36px;background:rgba(255,255,255,0.05);border:none;color:var(--white);font-size:1.1rem;cursor:pointer;">+</button>
+                </div>
+                <a href="/cart/change?line={{ forloop.index }}&quantity=0"
+                   style="font-size:0.8rem;color:var(--smoke);text-decoration:none;letter-spacing:1px;text-transform:uppercase;">
+                   Remove
+                </a>
+              </div>
+            </div>
+
+            <!-- Item Price -->
+            <div style="font-family:'Oswald',sans-serif;font-size:1.2rem;font-weight:600;color:var(--gold);white-space:nowrap;">
+              {{ item.line_price | money }}
+            </div>
+
+          </div>
+        {% endfor %}
+      </div>
+
+      <!-- Order Summary -->
+      <div style="background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:12px;padding:28px 32px;max-width:400px;margin-left:auto;">
+        <div style="display:flex;justify-content:space-between;margin-bottom:12px;font-family:'Barlow',sans-serif;color:var(--smoke);">
+          <span>Subtotal</span>
+          <span style="color:var(--white);">{{ cart.total_price | money }}</span>
+        </div>
+        <div style="font-size:0.8rem;color:var(--smoke);margin-bottom:24px;font-style:italic;">
+          Taxes and shipping calculated at checkout
+        </div>
+        <a href="/checkout" class="add-to-cart" style="display:block;text-align:center;text-decoration:none;padding:16px;font-size:1rem;letter-spacing:2px;">
+          Checkout &rarr;
+        </a>
+        <button type="submit" name="update"
+                style="width:100%;margin-top:10px;padding:12px;background:transparent;border:1px solid rgba(255,255,255,0.15);border-radius:8px;color:var(--smoke);font-family:'Barlow Condensed',sans-serif;font-size:0.85rem;letter-spacing:2px;text-transform:uppercase;cursor:pointer;">
+          Update Cart
+        </button>
+        <div style="text-align:center;margin-top:16px;">
+          <a href="/collections/all" style="font-size:0.82rem;color:var(--smoke);text-decoration:none;letter-spacing:1px;">
+            &larr; Continue Shopping
+          </a>
+        </div>
+      </div>
+
+    </form>
+  {% endif %}
+</div>
+
+<script>
+function updateQty(index, delta) {
+  var input = document.getElementById('qty-' + index);
+  var newVal = Math.max(0, parseInt(input.value || 0) + delta);
+  input.value = newVal;
+}
+</script>
