@@ -7,7 +7,7 @@
       <h2 class="section-title reveal">Tee <span class="gold">Sleeves&trade;</span></h2>
       <p class="section-subtitle reveal">Premium PVC slip-on covers that shield your batting tee from sun, rain, dirt, and the elements. Four colors. Three sizes.</p>
       <div class="lineup-grid">
-        {% assign ts_col = collections['tee-sleeves'] %}
+        {% assign ts_col = collections['frontpage'] %}
         {% for product in ts_col.products %}
           {% assign accent = '#333' %}
           {% if product.title contains 'Red' or product.title contains 'Crimson' %}{% assign accent = '#c41e3a' %}
