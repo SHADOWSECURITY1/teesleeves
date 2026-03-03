@@ -113,22 +113,75 @@
 </div>
 
 <script>
+var productVariants = {{ product.variants | json }};
+
 var sizeDescriptions = {
-  '2"':                      'Universal pure slip cover. No ball retriever. Fits standard slim tee stems for baseball or softball.',
-  '3" + Baseball Hopper':    'Includes baseball hopper attachment. Picks up baseballs after each swing. Built for baseball tees.',
-  '4" + Softball Hopper':    'Includes softball hopper attachment. Sized for softballs. Compatible with most softball tee bases.'
+  '2"':                   'Universal pure slip cover. No ball retriever. Fits standard slim tee stems for baseball or softball.',
+  '3" + Baseball Hopper': 'Includes baseball hopper attachment. Picks up baseballs after each swing. Built for baseball tees.',
+  '4" + Softball Hopper': 'Includes softball hopper attachment. Sized for softballs. Compatible with most softball tee bases.'
 };
 
-var currentBase  = 34.95;
-var logoUpcharge = 0;
+var currentBase      = 34.95;
+var logoUpcharge     = 0;
+var currentLogoChoice = 'no';
+var currentSizeVal   = '2"';
+
+/* Find the Shopify variant that best matches the selected size and logo choice.
+   Products may have 2-3 options (Color / Logo / Size or just Logo / Size).
+   We match by scanning all option fields for a size digit and logo indicator. */
+function findVariant(size, logoChoice) {
+  var sizeNum = size.charAt(0); // '2', '3', or '4'
+
+  function optsOf(v) {
+    return [v.option1, v.option2, v.option3].map(function(o){ return (o || '').toLowerCase().trim(); });
+  }
+  function sizeMatch(opts) {
+    return opts.some(function(o){ return o.charAt(0) === sizeNum && o.indexOf('"') > -1; });
+  }
+  function logoMatch(opts) {
+    // Look for an option that is clearly a logo yes/no field
+    var logoOpt = null;
+    opts.forEach(function(o){
+      if (o === 'no' || o === 'yes' || o === 'none' || o.indexOf('logo') > -1 || o.indexOf('custom') > -1) {
+        logoOpt = o;
+      }
+    });
+    if (logoOpt === null) return true; // no logo option on this product
+    if (logoChoice === 'yes') {
+      return logoOpt !== 'no' && logoOpt !== 'none' && logoOpt !== 'no logo';
+    } else {
+      return logoOpt === 'no' || logoOpt === 'none' || logoOpt === 'no logo';
+    }
+  }
+
+  // Try exact size + logo match first
+  for (var i = 0; i < productVariants.length; i++) {
+    var v = productVariants[i];
+    var opts = optsOf(v);
+    if (sizeMatch(opts) && logoMatch(opts)) return v;
+  }
+  // Fallback: size match only
+  for (var i = 0; i < productVariants.length; i++) {
+    var v = productVariants[i];
+    if (sizeMatch(optsOf(v))) return v;
+  }
+  return productVariants[0];
+}
+
+function updateVariantId() {
+  var v = findVariant(currentSizeVal, currentLogoChoice);
+  if (v) document.querySelector('#product-form input[name="id"]').value = v.id;
+}
 
 function selectSize(el) {
-  document.querySelectorAll('#size-options .size-opt').forEach(function(s) { s.classList.remove('selected'); });
+  document.querySelectorAll('#size-options .size-opt').forEach(function(s){ s.classList.remove('selected'); });
   el.classList.add('selected');
-  currentBase = parseFloat(el.dataset.base);
+  currentBase    = parseFloat(el.dataset.base);
+  currentSizeVal = el.dataset.size;
   document.getElementById('prop-size').value = el.dataset.size;
   var desc = sizeDescriptions[el.dataset.size];
   if (desc) document.getElementById('sizeDesc').textContent = desc;
+  updateVariantId();
   updatePrice();
 }
 
@@ -136,8 +189,10 @@ function selectLogo(el, choice) {
   document.getElementById('logo-no').classList.remove('selected');
   document.getElementById('logo-yes').classList.remove('selected');
   el.classList.add('selected');
+  currentLogoChoice = choice;
   logoUpcharge = (choice === 'yes') ? 9.95 : 0;
   document.getElementById('prop-logo').value = (choice === 'yes') ? 'Add Custom Logo (+$9.95)' : 'No Logo';
+  updateVariantId();
   updatePrice();
 }
 
