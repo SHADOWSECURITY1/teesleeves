@@ -1,16 +1,88 @@
-<div class="page-hero"><div class="page-hero-glow"></div><div class="section-tag">The Arsenal</div><h1 class="section-title">Shop <span class="gold">Tee Sleeves</span></h1><p class="section-subtitle">Premium PVC slip-on covers that shield your batting tee from sun, rain, dirt, and the elements. Available in four colors and three sizes.</p></div>
-<div class="shop-grid">    <a href="/collections/all" class="shop-card reveal"><div class="shop-swatch" style="background:radial-gradient(circle,#1f1f2a,#0e1117);"><div class="shop-tag">Popular</div><img src="{{ 'shop-image-1.png' | asset_url }}" alt="Stealth Black Tee Sleeve" class="product-photo"></div><div class="shop-info"><div class="shop-name">Tee Sleeves&trade; &mdash; Stealth Black</div><div class="shop-desc">The classic. Disappears on the field while keeping your tee pristine.</div><div class="shop-bottom"><div class="shop-price">$29.95</div><div class="shop-btn">View Details &rarr;</div></div></div></a>
-    <a href="/collections/all" class="shop-card reveal"><div class="shop-swatch" style="background:radial-gradient(circle,#2a0a15,#0e1117);"><div class="shop-tag">Hot</div><img src="{{ 'shop-image-2.png' | asset_url }}" alt="Crimson Red Tee Sleeve" class="product-photo"></div><div class="shop-info"><div class="shop-name">Tee Sleeves&trade; &mdash; Crimson Red</div><div class="shop-desc">Bold team presence. Stands out at practice and protects all season.</div><div class="shop-bottom"><div class="shop-price">$29.95</div><div class="shop-btn">View Details &rarr;</div></div></div></a>
-    <a href="/collections/all" class="shop-card reveal"><div class="shop-swatch" style="background:radial-gradient(circle,#0a1530,#0e1117);"><img src="{{ 'shop-image-3.png' | asset_url }}" alt="Navy Blue Tee Sleeve" class="product-photo"></div><div class="shop-info"><div class="shop-name">Tee Sleeves&trade; &mdash; Navy Blue</div><div class="shop-desc">Clean, professional look that pairs with almost any team color palette.</div><div class="shop-bottom"><div class="shop-price">$29.95</div><div class="shop-btn">View Details &rarr;</div></div></div></a>
-    <a href="/collections/all" class="shop-card reveal"><div class="shop-swatch" style="background:radial-gradient(circle,#1f2030,#0e1117);"><img src="{{ 'shop-image-4.png' | asset_url }}" alt="Clean White Tee Sleeve" class="product-photo"></div><div class="shop-info"><div class="shop-name">Tee Sleeves&trade; &mdash; Clean White</div><div class="shop-desc">Bright, sharp, and easy to spot. Great canvas for custom team logos.</div><div class="shop-bottom"><div class="shop-price">$29.95</div><div class="shop-btn">View Details &rarr;</div></div></div></a>
+<div class="page-hero">
+  <div class="page-hero-glow"></div>
+  <div class="section-tag">The Arsenal</div>
+  <h1 class="section-title">Shop <span class="gold">{{ collection.title }}</span></h1>
+  <p class="section-subtitle">Premium PVC slip-on covers that shield your batting tee from sun, rain, dirt, and the elements. Available in four colors and three sizes.</p>
 </div>
-<div class="size-guide reveal"><div class="section-tag">Size Guide</div><h2 class="section-title" style="font-size:clamp(28px,3vw,40px)">Find Your <span class="gold">Fit</span></h2>
-<table class="size-table"><thead><tr><th>Diameter</th><th>Sport</th><th>Type</th><th>Description</th></tr></thead><tbody>
-<tr><td><strong style="color:var(--gold-warm)">2"</strong></td><td>Baseball &amp; Softball</td><td>Universal Slip Cover</td><td>Pure protection sleeve. No ball retriever. Fits standard slim tee stems.</td></tr>
-<tr><td><strong style="color:var(--gold-warm)">3"</strong></td><td>Baseball</td><td>Ball Retriever Compatible</td><td>Designed for baseball tees with built-in ball retriever. Picks up baseballs.</td></tr>
-<tr><td><strong style="color:var(--gold-warm)">4"</strong></td><td>Softball</td><td>Ball Hopper Compatible</td><td>Built for softball tees with ball hopper attachment. Sized for softballs.</td></tr>
-</tbody></table></div>
+
+<div class="shop-grid">
+  {% for product in collection.products %}
+    {% assign bg_color = '#1f1f2a' %}
+    {% if product.title contains 'Red' or product.title contains 'Crimson' %}
+      {% assign bg_color = '#2a0a15' %}
+    {% elsif product.title contains 'Navy' or product.title contains 'Blue' %}
+      {% assign bg_color = '#0a1530' %}
+    {% elsif product.title contains 'White' %}
+      {% assign bg_color = '#1f2030' %}
+    {% endif %}
+
+    <a href="{{ product.url }}" class="shop-card reveal">
+      <div class="shop-swatch" style="background:radial-gradient(circle,{{ bg_color }},#0e1117);">
+        {% if product.available == false %}
+          <div class="shop-tag">Sold Out</div>
+        {% elsif forloop.first %}
+          <div class="shop-tag">Popular</div>
+        {% endif %}
+        {% if product.featured_image %}
+          <img src="{{ product.featured_image | img_url: 'large' }}"
+               alt="{{ product.featured_image.alt | default: product.title | escape }}"
+               class="product-photo">
+        {% endif %}
+      </div>
+      <div class="shop-info">
+        <div class="shop-name">{{ product.title }}</div>
+        <div class="shop-desc">{{ product.description | strip_html | truncate: 80 }}</div>
+        <div class="shop-bottom">
+          <div class="shop-price">
+            {% if product.compare_at_price > product.price %}
+              <span style="text-decoration:line-through;opacity:0.5;margin-right:6px;">{{ product.compare_at_price | money }}</span>
+            {% endif %}
+            {{ product.price | money }}
+          </div>
+          <div class="shop-btn">View Details &rarr;</div>
+        </div>
+      </div>
+    </a>
+  {% else %}
+    <p style="color:var(--mist);padding:40px;">No products found in this collection.</p>
+  {% endfor %}
+</div>
+
+<div class="size-guide reveal">
+  <div class="section-tag">Size Guide</div>
+  <h2 class="section-title" style="font-size:clamp(28px,3vw,40px)">Find Your <span class="gold">Fit</span></h2>
+  <table class="size-table">
+    <thead>
+      <tr><th>Diameter</th><th>Sport</th><th>Type</th><th>Description</th></tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><strong style="color:var(--gold-warm)">2"</strong></td>
+        <td>Baseball &amp; Softball</td>
+        <td>Universal Slip Cover</td>
+        <td>Pure protection sleeve. No ball retriever. Fits standard slim tee stems.</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--gold-warm)">3"</strong></td>
+        <td>Baseball</td>
+        <td>Ball Retriever Compatible</td>
+        <td>Designed for baseball tees with built-in ball retriever. Picks up baseballs.</td>
+      </tr>
+      <tr>
+        <td><strong style="color:var(--gold-warm)">4"</strong></td>
+        <td>Softball</td>
+        <td>Ball Hopper Compatible</td>
+        <td>Built for softball tees with ball hopper attachment. Sized for softballs.</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
 <script>
-const observer=new IntersectionObserver(e=>{e.forEach((e,i)=>{e.isIntersecting&&(setTimeout(()=>e.target.classList.add('visible'),i*100),observer.unobserve(e.target))})},{threshold:.1,rootMargin:'0px 0px -40px 0px'});
-document.querySelectorAll('.reveal').forEach(el=>observer.observe(el));
+const observer = new IntersectionObserver(e => {
+  e.forEach((e, i) => {
+    e.isIntersecting && (setTimeout(() => e.target.classList.add('visible'), i * 100), observer.unobserve(e.target));
+  });
+}, { threshold: .1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
 </script>
