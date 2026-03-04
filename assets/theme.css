@@ -291,6 +291,16 @@
     cursor: pointer; transition: all 0.3s; text-decoration: none;
   }
   .btn-ghost:hover { border-color: var(--gold); background: rgba(212,168,83,0.08); }
+  .btn-blue {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: #002D72; color: #ffffff;
+    padding: 16px 30px;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-weight: 600; font-size: 14px;
+    letter-spacing: 2px; text-transform: uppercase;
+    border: none; cursor: pointer; transition: all 0.3s; text-decoration: none;
+  }
+  .btn-blue:hover { background: #003fa3; transform: translateY(-2px); }
 
   /* Hero product card */
   .hero-visual {
